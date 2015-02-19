@@ -15,10 +15,15 @@ TL;DR
 > ```
 
 **Why?**
+
 1. When a single .vimrc won't cut it anymore and you know why
+
 2. To keep track with multiple backups
+
 3. You don't want to backup/restore manually every time
+
 4. When the place to restore your settings doesn't have Internet connection thus can't simply run :PluginInstall or something like that. Yes you can do it manually, but [go back to 2]
+
 5. To easily share your settings to even the most novice Vim users. To do that, simply fork this repository and save your package into it, then let them install from your repository.
 
 
@@ -55,8 +60,8 @@ The `[command]` can be one of the following:
 ----------
 
 Suggestions and contributions are welcome.
-For troubleshooting, go to  [issues section]( https://github.com/NLKNguyen/vim-kit-installer/issues)
 
+For troubleshooting, go to  [issues section]( https://github.com/NLKNguyen/vim-kit-installer/issues)
 
 
 > Author: [Nguyen Nguyen](https://github.com/NLKNguyen)
