@@ -49,7 +49,6 @@
 vimrc_location=~/.vimrc
 vim_location=~/.vim/
 
-#TODO: fix to installer file directory. Get the absolute path of the running script
 installer_location=$(pwd)
 packages_location="$installer_location/pkgs"
 
