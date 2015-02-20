@@ -33,7 +33,7 @@
 #        AUTHOR:  Nguyen Nguyen, NLKNguyen@MSN.com 
 #        ORIGIN:  https://github.com/NLKNguyen/vim-kit-installer.git
 #       LICENSE:  MIT
-#       VERSION:  0.1.0
+#       VERSION:  0.1.1
 #
 #===================================================================
 
@@ -48,8 +48,6 @@
 
 vimrc_location=~/.vimrc
 vim_location=~/.vim/
-fonts_location=~/.fonts/
-bashrc_location=~/.bashrc
 
 #TODO: fix to installer file directory. Get the absolute path of the running script
 installer_location=$(pwd)
@@ -81,7 +79,7 @@ isElementInList () {
 # @Param [Command Line arguments]
 validateInputs () {
   if [ $# -lt 1 ]; then
-    exitErrMsg 1  "Not enough arguments\nSample usage: ./install.sh --load vimForSystemDev"
+    exitErrMsg 1  "Not enough arguments\nUsage: ./install.sh --load <package name>"
   fi
 
   options=("--save" "--load" "--clean" "--list" "--remove" "--help") 
@@ -94,7 +92,7 @@ validateInputs () {
   fi
 
   if isElementInList "$1" "--save" "--load" "--remove"  && [ $# -lt 2 ]; then
-    exitErrMsg 1  "Not enough arguments for $1. Need a target name.\nSample usage: ./install.sh $1 vimForSystemDev"
+    exitErrMsg 1  "Not enough arguments for $1. Need a target name.\nSample usage: ./install.sh $1 <package name>"
   fi
 
 }
@@ -145,11 +143,11 @@ runCleanRequest () {
 cleanVimLocation () {
   echo "Cleaning..."
   if [ -d "$vim_location" ]; then
-    rm -rf "$vim_location" || exitErrMsg 5 "Can't remove $vim_location."
+    sudo rm -rf "$vim_location" || exitErrMsg 5 "Can't remove $vim_location."
   fi
 
   if [ -e "$vimrc_location" ]; then
-    rm -f "$vimrc_location" || exitErrMsg 5 "Can't remove $vimrc_location."
+    sudo rm -f "$vimrc_location" || exitErrMsg 5 "Can't remove $vimrc_location."
   fi
   echo "Done. Successfully cleaned the current vim configuration."
   return 0
@@ -177,25 +175,20 @@ loadTargetToVim () {
 runLoadRequest () {
   for target in "$@"
   do
-    case "$target" in
-      "--fonts" )
-        ;;
-      * )
-        package="$packages_location/$target.tar.gz"
+    package="$packages_location/$target.tar.gz"
 
-        if [ -e "$package" ]
-        then 
-          echo "'$target' target will replace your current vim configuration (eg: .vim/ .vimrc)." 
-          prompt="Do you want to continue? (y/n) "
-          if isYesOnConfirmation "$prompt"; then
-            loadTargetToVim "$target"
-          else
-            echo "Request cancelled. Nothing has changed."
-          fi
-        else
-          exitErrMsg 3 "'$target' target is not found."
-        fi
-    esac
+    if [ -e "$package" ]
+    then 
+      echo "'$target' target will replace your current vim configuration (eg: .vim/ .vimrc)." 
+      prompt="Do you want to continue? (y/n) "
+      if isYesOnConfirmation "$prompt"; then
+        loadTargetToVim "$target"
+      else
+        echo "Request cancelled. Nothing has changed."
+      fi
+    else
+      exitErrMsg 3 "'$target' target is not found."
+    fi
   done
 }
 
@@ -241,28 +234,21 @@ runSaveRequest () {
 
   for target in "$@"
   do
-    case "$target" in
-      "--fonts" )
+    package="$packages_location/$target.tar.gz"
 
-        ;;
-      * )
-        package="$packages_location/$target.tar.gz"
+    if [ -e "$package" ]
+    then 
+      prompt="'$target' target already exists. Do you want to replace it? (y/n) "
+      if isYesOnConfirmation "$prompt"; then
+        saveVimToTarget "$target"
+      else
+        echo "Request cancelled. Nothing has changed."
+        exit 0
+      fi
 
-        if [ -e "$package" ]
-        then 
-          prompt="'$target' target already exists. Do you want to replace it? (y/n) "
-          if isYesOnConfirmation "$prompt"; then
-            saveVimToTarget "$target"
-          else
-            echo "Request cancelled. Nothing has changed."
-            exit 0
-          fi
-
-        else
-          saveVimToTarget "$target"
-        fi 
-        ;;
-    esac
+    else
+      saveVimToTarget "$target"
+    fi 
   done
 }
 
@@ -291,27 +277,20 @@ saveVimToTarget () {
 runRemoveRequest () {
   for target in "$@"
   do
-    case "$target" in
-      "--fonts" )
-
-        ;;
-      * )
-        package="$packages_location/$target.tar.gz"
-        if [ -e "$package" ];
-        then
-          prompt="Are you sure you want to remove '$target' target? (y/n) "
-          if isYesOnConfirmation "$prompt"; then
-            echo "Removing..."
-            rm -f "$package" || exitErrMsg 4 "Can't remove '$target' target."
-            echo "Done. Successfully removed '$target' target."
-          else
-            echo "Request cancelled. Nothing has changed."
-          fi
-        else
-          exitErrMsg 4 "Can't find '$target' target."
-        fi
-        ;;
-    esac
+    package="$packages_location/$target.tar.gz"
+    if [ -e "$package" ];
+    then
+      prompt="Are you sure you want to remove '$target' target? (y/n) "
+      if isYesOnConfirmation "$prompt"; then
+        echo "Removing..."
+        sudo rm -f "$package" || exitErrMsg 4 "Can't remove '$target' target."
+        echo "Done. Successfully removed '$target' target."
+      else
+        echo "Request cancelled. Nothing has changed."
+      fi
+    else
+      exitErrMsg 4 "Can't find '$target' target."
+    fi
   done
 }
 
