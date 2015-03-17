@@ -57,6 +57,30 @@ The `[command]` can be one of the following:
 
 **`--help`** shows usage information
 
+#Side Effect and Solution
+Since the `--save` command put **~/.vim/** and **.vimrc** in a Tarball file, if you Git to store your settings, the size of the repository will go up quickly because Git cannot store multiple versions of a Tarball file as efficient as editable text files.
+
+The solution is simple. Use BFG Repo-Cleaner tool to clean up old versions of your packages in your Git repository.
+
+First, download the BFG jar file https://rtyley.github.io/bfg-repo-cleaner/
+
+Then, for your convenience, in your **~/.bashrc** set an alias for `bfg` command
+```Bash
+alias bfg='java -jar [path to BFG .jar file]
+```
+
+In your Git repository, run this command to delete all old versions of package files. Don't worry, it will not affect the current package files in your repository.
+```Shell
+bfg --delete-files *.tar.gz
+```
+
+Finally, run this command to physically remove the unwanted files
+```Git
+git reflog expire --expire=now --all && git gc --prune=now --aggressive
+```
+
+To update the remote repository, simple run `git push`.
+
 ----------
 
 Suggestions and contributions are welcome.
