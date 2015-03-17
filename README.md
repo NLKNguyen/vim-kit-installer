@@ -70,12 +70,12 @@ alias bfg='java -jar [path to BFG .jar file]
 ```
 
 In your Git repository, run this command to delete all old versions of package files. Don't worry, it will not affect the current package files in your repository.
-```Shell
+```
 bfg --delete-files *.tar.gz
 ```
 
 Finally, run this command to physically remove the unwanted files
-```Git
+```
 git reflog expire --expire=now --all && git gc --prune=now --aggressive
 ```
 
