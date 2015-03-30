@@ -84,6 +84,13 @@ git reflog expire --expire=now --all && git gc --prune=now --aggressive
 
 To update the remote repository, simply run `git push -f`
 
+## Force pull from remote repository
+After doing the above instruction to clean up, in order to pull from the remote repository onto older local repository, use the following commands:
+```
+git fetch --all
+git reset --hard origin/master
+```
+
 ----------
 
 Suggestions and contributions are welcome.
