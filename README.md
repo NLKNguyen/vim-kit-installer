@@ -57,6 +57,9 @@ The `[command]` can be one of the following:
 
 **`--help`** shows usage information
 
+**`-s`** Some system requires root permission to operate some of these operations. Placing this optional flag at the end to use `sudo` on certain tasks like --load --clean --remove <br>
+eg: `./install --load <package name> -s`
+
 #Side Effect and Solution
 Since the `--save` command put **~/.vim/** and **.vimrc** in a Tarball file, if you Git to store your settings, the size of the repository will go up quickly because Git cannot store multiple versions of a Tarball file as efficient as editable text files.
 
@@ -79,7 +82,7 @@ Finally, run this command to physically remove the unwanted files
 git reflog expire --expire=now --all && git gc --prune=now --aggressive
 ```
 
-To update the remote repository, simple run `git push`.
+To update the remote repository, simply run `git push -f`
 
 ----------
 
