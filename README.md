@@ -57,7 +57,7 @@ The `[command]` can be one of the following:
 
 **`--help`** shows usage information
 
-**`-s`** Some system requires root permission to operate some of these operations. Placing this optional flag at the end to use `sudo` on certain tasks like --load --clean --remove <br>
+**`-s`** some systems require root permission to operate some of these operations. Placing this optional flag at the end to use `sudo` on certain tasks like --load --clean --remove <br>
 eg: `./install --load <package name> -s`
 
 #Side Effect and Solution
